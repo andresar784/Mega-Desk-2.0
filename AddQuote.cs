@@ -47,20 +47,25 @@ namespace MegaDesk_Rodriguez
         }
         private void CreateOrderButton_Click(object sender, EventArgs e)
         {
-            // When the 'Create Order' button is clicked, calculate the total price
-            decimal price = CalculateTotalPrice();
+            try
+            {
+                // When the 'Create Order' button is clicked, calculate the total price
+                decimal price = CalculateTotalPrice();
 
-            DisplayQuote displayQuote = new DisplayQuote();
-            displayQuote.CustomerName = customer.Text;
-            displayQuote.Depth = Convert.ToInt32(depth.Text);
-            displayQuote.Width = Convert.ToInt32(width.Text);
-            displayQuote.Material = material.Text;
-            displayQuote.Drawers = Convert.ToInt32(drawers.Text);
-            displayQuote.TotalPrice = price;
-           //Console.WriteLine("Call here" + width);
+                DisplayQuote displayQuote = new DisplayQuote();
+                displayQuote.CustomerName = customer.Text;
+                displayQuote.Depth = Convert.ToInt32(depth.Text);
+                displayQuote.Width = Convert.ToInt32(width.Text);
+                displayQuote.Material = material.Text;
+                displayQuote.Drawers = Convert.ToInt32(drawers.Text);
+                displayQuote.TotalPrice = price;
 
-            displayQuote.Show();
-            //Console.WriteLine();
+                displayQuote.Show();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while processing data: " + ex.Message);
+            }
 
         }
       
@@ -218,9 +223,8 @@ namespace MegaDesk_Rodriguez
 
             // Calculate the total price including the rush order surcharge
             decimal totalPrice = basePrice + surcharge;
-            Console.WriteLine(totalPrice);
-            //totalTextBox.Text = totalPrice.ToString();
-            return totalPrice; 
+            //Console.WriteLine(totalPrice);
+            return totalPrice;
         }
         
     }
