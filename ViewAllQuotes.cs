@@ -12,9 +12,11 @@ namespace MegaDesk_Rodriguez
 {
     public partial class ViewAllQuotes : Form
     {
+
         public ViewAllQuotes()
         {
             InitializeComponent();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -22,6 +24,11 @@ namespace MegaDesk_Rodriguez
             MainMenu mainMenu = (MainMenu)Tag;
             mainMenu.Show();
             this.Close();
+        }
+
+        private void ViewAllQuotes_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

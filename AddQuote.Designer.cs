@@ -39,13 +39,13 @@ namespace MegaDesk_Rodriguez
             this.customer = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.rush = new System.Windows.Forms.TextBox();
             this.createOrder = new System.Windows.Forms.Button();
             this.exit = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.date = new System.Windows.Forms.Label();
             this.material = new System.Windows.Forms.ComboBox();
             this.drawers = new System.Windows.Forms.ComboBox();
+            this.rush = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // width
@@ -130,15 +130,6 @@ namespace MegaDesk_Rodriguez
             this.label6.TabIndex = 11;
             this.label6.Text = "Rush Order";
             // 
-            // rush
-            // 
-            this.rush.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.rush.Location = new System.Drawing.Point(82, 273);
-            this.rush.Name = "rush";
-            this.rush.Size = new System.Drawing.Size(100, 20);
-            this.rush.TabIndex = 5;
-            this.rush.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
             // createOrder
             // 
             this.createOrder.Location = new System.Drawing.Point(131, 332);
@@ -193,11 +184,20 @@ namespace MegaDesk_Rodriguez
             this.drawers.Size = new System.Drawing.Size(100, 21);
             this.drawers.TabIndex = 3;
             // 
+            // rush
+            // 
+            this.rush.FormattingEnabled = true;
+            this.rush.Location = new System.Drawing.Point(82, 273);
+            this.rush.Name = "rush";
+            this.rush.Size = new System.Drawing.Size(100, 21);
+            this.rush.TabIndex = 5;
+            // 
             // AddQuote
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(283, 367);
+            this.Controls.Add(this.rush);
             this.Controls.Add(this.drawers);
             this.Controls.Add(this.material);
             this.Controls.Add(this.date);
@@ -205,7 +205,6 @@ namespace MegaDesk_Rodriguez
             this.Controls.Add(this.exit);
             this.Controls.Add(this.createOrder);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.rush);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.customer);
@@ -233,12 +232,12 @@ namespace MegaDesk_Rodriguez
         private TextBox customer;
         private Label label5;
         private Label label6;
-        private TextBox rush;
         private Button createOrder;
         private Button exit;
         private Label label7;
         private Label date;
         private ComboBox material;
         private ComboBox drawers;
+        private ComboBox rush;
     }
 }

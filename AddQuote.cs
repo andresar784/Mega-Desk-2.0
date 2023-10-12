@@ -19,10 +19,8 @@ namespace MegaDesk_Rodriguez
         private decimal veneerPrice = 150; 
         private decimal pinePrice = 50; 
         private decimal drawerPricePerDrawer = 50; 
-        private decimal threeDaysRushSurcharge = 50m; 
-        private decimal fiveDaysRushSurcharge = 30m; 
-        private decimal sevenDaysRushSurcharge = 20m; 
-        private decimal fourteenDaysRushSurcharge = 10m;
+       
+        private double[,] rushOrderPrices;
 
         public AddQuote()
         {
@@ -38,12 +36,24 @@ namespace MegaDesk_Rodriguez
             depth.KeyPress += Depth_KeyPress;
             FormClosing += AddQuote_FormClosing;
 
-            material.DataSource = Enum.GetValues(typeof(Desk.DesktopMaterial));
+            List<Desk.DesktopMaterial> materials = Enum.GetValues(typeof(Desk.DesktopMaterial))
+                                                .Cast<Desk.DesktopMaterial>()
+                                                .ToList();
+            material.DataSource = materials;
+
+            //material.DataSource = Enum.GetValues(typeof(Desk.DesktopMaterial));
             for (int i = 1; i <= 7; i++)
             {
                 drawers.Items.Add(i);
             }
-            
+
+            rush.Items.AddRange(new object[] { "Normal (14 days)", "Rush 3 days", "Rush 5 days", "Rush 7 days" });
+            rush.SelectedIndex = 0;
+
+            string filePath = "C:\\BYU-I\\CSE-325\\MegaDesk Rodriguez\\rushOrderFile.txt";
+
+            DeskQuote deskQuote = new DeskQuote();
+            rushOrderPrices = DeskQuote.GetRushOrders(filePath);
         }
         private void CreateOrderButton_Click(object sender, EventArgs e)
         {
@@ -161,36 +171,42 @@ namespace MegaDesk_Rodriguez
             mainMenu.Show();
             this.Close();
         }
+         private int CalculateSurfaceArea()
+        {
+            int deskWidth = Convert.ToInt32(width.Text);
+            int deskDepth = Convert.ToInt32(depth.Text);
+
+            int area = deskDepth * deskDepth;
+            return area;
+        }
         private decimal CalculateBasePrice()
         {
             decimal basePrice = 200;
-
+            int area = CalculateSurfaceArea();
             // Calculate base price based on desk size and material
             Desk.DesktopMaterial selectedMaterial = (Desk.DesktopMaterial)material.SelectedItem;
-            int deskWidth = Convert.ToInt32(width.Text); 
-            int deskDepth = Convert.ToInt32(depth.Text);
             
             switch (selectedMaterial)
             {
                 case Desk.DesktopMaterial.Laminated:
-                    basePrice += (deskWidth * deskDepth + laminatedPrice);
+                    basePrice += (area + laminatedPrice);
                     break;
                 case Desk.DesktopMaterial.Oak:
-                    basePrice += (deskWidth * deskDepth + oakPrice);
+                    basePrice += (area + oakPrice);
                     break;
                 case Desk.DesktopMaterial.Rosewood:
-                    basePrice += (deskWidth * deskDepth + rosewoodPrice);
+                    basePrice += (area + rosewoodPrice);
                     break;
                 case Desk.DesktopMaterial.Veneer:
-                    basePrice += (deskWidth * deskDepth + veneerPrice);
+                    basePrice += (area + veneerPrice);
                     break;
                 case Desk.DesktopMaterial.Pine:
-                    basePrice += (deskWidth * deskDepth + pinePrice);
+                    basePrice += (area + pinePrice);
                     break;
             }
 
             // Calculate base price based on the number of drawers
-            int numDrawers = Convert.ToInt32(drawers.Text); // replace with your actual control
+            int numDrawers = Convert.ToInt32(drawers.Text); 
             basePrice += (numDrawers * drawerPricePerDrawer);
 
             return basePrice;
@@ -198,22 +214,75 @@ namespace MegaDesk_Rodriguez
 
         private decimal CalculateRushSurcharge()
         {
-            // Calculate surcharge based on rush order option
-            int rushOrder = Convert.ToInt32(rush.Text);
-
-            switch (rushOrder)
+            try
             {
-                case 3:
-                    return threeDaysRushSurcharge;
-                case 5:
-                    return fiveDaysRushSurcharge;
-                case 7:
-                    return sevenDaysRushSurcharge;
-                default:
-                    return fourteenDaysRushSurcharge;
+                string selectedOption = rush.SelectedItem.ToString();
+                int rushOrder = ExtractDays(selectedOption);
+                int area = CalculateSurfaceArea();
+
+                // Calculate surcharge based on rush order option and area
+                if (area < 1000)
+                {
+                    switch (rushOrder)
+                    {
+                        case 3:
+                            return Convert.ToDecimal(rushOrderPrices[0, 0]); 
+                        case 5:
+                            return Convert.ToDecimal(rushOrderPrices[1, 0]); 
+                        case 7:
+                            return Convert.ToDecimal(rushOrderPrices[2, 0]); 
+                        default:
+                            return Convert.ToDecimal(rushOrderPrices[1, 0]); 
+                    }
+                }
+                else if (area >= 1000 && area <= 2000)
+                {
+                    switch (rushOrder)
+                    {
+                        case 3:
+                            return Convert.ToDecimal(rushOrderPrices[0, 1]); 
+                        case 5:
+                            return Convert.ToDecimal(rushOrderPrices[1, 1]); 
+                        case 7:
+                            return Convert.ToDecimal(rushOrderPrices[2, 1]); 
+                        default:
+                            return Convert.ToDecimal(rushOrderPrices[2, 1]); 
+                    }
+                }
+                else // Area is greater than 2000
+                {
+                    switch (rushOrder)
+                    {
+                        case 3:
+                            return Convert.ToDecimal(rushOrderPrices[0, 2]); 
+                        case 5:
+                            return Convert.ToDecimal(rushOrderPrices[1, 2]); 
+                        case 7:
+                            return Convert.ToDecimal(rushOrderPrices[1, 0]); 
+                        default:
+                            return Convert.ToDecimal(rushOrderPrices[0, 0]); 
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error calculating rush surcharge: " + ex.Message);
+                return 0; 
             }
         }
-        //To send data between event
+
+        private int ExtractDays(string option)
+        {
+            string[] words = option.Split(' ');
+            foreach (string word in words)
+            {
+                if (int.TryParse(word, out int days))
+                {
+                    return days;
+                }
+            }
+            return 14; // Default  14 
+        }
 
         private decimal CalculateTotalPrice()
         {

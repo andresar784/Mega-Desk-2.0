@@ -18,10 +18,10 @@ namespace MegaDesk_Rodriguez
             Veneer
         }
         
-        public const int MinWidth = 12;
-        public const int MaxWidth = 30;
+        public const int MinWidth = 24;
+        public const int MaxWidth = 96;
 
-        public const int MinDepth = 4;
+        public const int MinDepth = 12;
         public const int MaxDepth = 48;
     }
 }

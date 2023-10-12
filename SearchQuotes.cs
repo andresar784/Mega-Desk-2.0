@@ -15,6 +15,11 @@ namespace MegaDesk_Rodriguez
         public SearchQuotes()
         {
             InitializeComponent();
+
+            List<Desk.DesktopMaterial> materials = Enum.GetValues(typeof(Desk.DesktopMaterial))
+                                                .Cast<Desk.DesktopMaterial>()
+                                                .ToList();
+            searchComboBox.DataSource = materials;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -22,6 +27,10 @@ namespace MegaDesk_Rodriguez
             MainMenu mainMenu = (MainMenu)Tag;
             mainMenu.Show();
             this.Close();
+        }
+        private void searchButton(object sender, EventArgs e)
+        {
+
         }
     }
 }

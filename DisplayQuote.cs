@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,7 +26,6 @@ namespace MegaDesk_Rodriguez
         }
         private void DisplayQuote_Load(object sender, EventArgs e)
         {
-            
             // Access properties and display information
             customer.Text = $"Customer Name: {CustomerName}";
             depth.Text = $"Depth: {Depth}";
@@ -37,6 +37,11 @@ namespace MegaDesk_Rodriguez
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void saveToFile(object sender, EventArgs e)
+        {       
+            
         }
     }
 }
