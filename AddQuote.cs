@@ -328,7 +328,24 @@ namespace MegaDesk_Rodriguez
             if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
             {
                 string json = File.ReadAllText(filePath);
-                existingQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
+                try
+                {
+                    existingQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
+                }
+                catch (JsonSerializationException)
+                {
+                    // If deserialization as a list fails, check if it's an empty object
+                    try
+                    {
+                        var singleQuote = JsonConvert.DeserializeObject<DeskQuote>(json);
+                        existingQuotes = new List<DeskQuote> { singleQuote };
+                    }
+                    catch (JsonSerializationException)
+                    {
+                        // If deserialization as a single object also fails, initialize an empty list
+                        existingQuotes = new List<DeskQuote>();
+                    }
+                    existingQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
             }
 
             // Add the new quote to the existing ones
@@ -339,4 +356,5 @@ namespace MegaDesk_Rodriguez
             File.WriteAllText(filePath, serializedQuotes);
         }
     }
+}
 }
