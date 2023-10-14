@@ -321,40 +321,56 @@ namespace MegaDesk_Rodriguez
         }
         private void SaveDeskQuoteToJson(DeskQuote deskQuote)
         {
-            string filePath = "C:\\BYU-I\\CSE-325\\MegaDesk Rodriguez\\quotes.json";
-            
-            List<DeskQuote> existingQuotes = new List<DeskQuote>();
-            
-            if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
+            try
             {
-                string json = File.ReadAllText(filePath);
-                try
+                // Specify the path for the JSON file
+                string filePath = "C:\\BYU-I\\CSE-325\\MegaDesk Rodriguez\\quotes.json";
+
+                // Initialize a new list to store quotes
+                List<DeskQuote> allQuotes;
+
+                // Check if the file exists
+                if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
                 {
-                    existingQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
-                }
-                catch (JsonSerializationException)
-                {
-                    // If deserialization as a list fails, check if it's an empty object
+                    // Read existing quotes from the file
+                    string json = File.ReadAllText(filePath);
+
+                    // Try to deserialize as a list
                     try
                     {
-                        var singleQuote = JsonConvert.DeserializeObject<DeskQuote>(json);
-                        existingQuotes = new List<DeskQuote> { singleQuote };
+                        allQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
                     }
                     catch (JsonSerializationException)
                     {
-                        // If deserialization as a single object also fails, initialize an empty list
-                        existingQuotes = new List<DeskQuote>();
+                        // If deserialization as a list fails, check if it's an empty object
+                        try
+                        {
+                            var singleQuote = JsonConvert.DeserializeObject<DeskQuote>(json);
+                            allQuotes = new List<DeskQuote> { singleQuote };
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            // If deserialization as a single object also fails, initialize an empty list
+                            allQuotes = new List<DeskQuote>();
+                        }
                     }
-                    existingQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
+                }
+                else
+                {
+                    allQuotes = new List<DeskQuote>();
+                }
+
+                // Add the new quote to the list
+                allQuotes.Add(deskQuote);
+
+                // Serialize the list of quotes and save to the file
+                string serializedQuotes = JsonConvert.SerializeObject(allQuotes, Formatting.Indented);
+                File.WriteAllText(filePath, serializedQuotes);
             }
-
-            // Add the new quote to the existing ones
-            existingQuotes.Add(deskQuote);
-
-            // Serialize the list of quotes and save to the file
-            string serializedQuotes = JsonConvert.SerializeObject(existingQuotes, Formatting.Indented);
-            File.WriteAllText(filePath, serializedQuotes);
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving quote to JSON: " + ex.Message);
+            }
         }
     }
-}
 }
