@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -295,6 +297,46 @@ namespace MegaDesk_Rodriguez
             //Console.WriteLine(totalPrice);
             return totalPrice;
         }
-        
+
+        private void saveDesk(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal price  = CalculateTotalPrice();
+                DeskQuote deskQuote = new DeskQuote()
+                {
+                    CustomerName = customer.Text,
+                    Depth = Convert.ToInt32(depth.Text),
+                    Width = Convert.ToInt32(width.Text),
+                    Material = material.Text,
+                    Drawers = Convert.ToInt32(drawers.Text),
+                    TotalPrice = price,
+                };
+                SaveDeskQuoteToJson(deskQuote);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error while processing data: {ex.Message}");
+            }
+        }
+        private void SaveDeskQuoteToJson(DeskQuote deskQuote)
+        {
+            string filePath = "C:\\BYU-I\\CSE-325\\MegaDesk Rodriguez\\quotes.json";
+            
+            List<DeskQuote> existingQuotes = new List<DeskQuote>();
+            
+            if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
+            {
+                string json = File.ReadAllText(filePath);
+                existingQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(json);
+            }
+
+            // Add the new quote to the existing ones
+            existingQuotes.Add(deskQuote);
+
+            // Serialize the list of quotes and save to the file
+            string serializedQuotes = JsonConvert.SerializeObject(existingQuotes, Formatting.Indented);
+            File.WriteAllText(filePath, serializedQuotes);
+        }
     }
 }

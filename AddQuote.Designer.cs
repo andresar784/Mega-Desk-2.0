@@ -46,6 +46,7 @@ namespace MegaDesk_Rodriguez
             this.material = new System.Windows.Forms.ComboBox();
             this.drawers = new System.Windows.Forms.ComboBox();
             this.rush = new System.Windows.Forms.ComboBox();
+            this.saveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // width
@@ -132,17 +133,17 @@ namespace MegaDesk_Rodriguez
             // 
             // createOrder
             // 
-            this.createOrder.Location = new System.Drawing.Point(131, 332);
+            this.createOrder.Location = new System.Drawing.Point(108, 332);
             this.createOrder.Name = "createOrder";
             this.createOrder.Size = new System.Drawing.Size(75, 23);
             this.createOrder.TabIndex = 12;
-            this.createOrder.Text = "Create Order";
+            this.createOrder.Text = "View Order";
             this.createOrder.UseVisualStyleBackColor = true;
             this.createOrder.Click += new System.EventHandler(this.CreateOrderButton_Click);
             // 
             // exit
             // 
-            this.exit.Location = new System.Drawing.Point(50, 332);
+            this.exit.Location = new System.Drawing.Point(27, 332);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(75, 23);
             this.exit.TabIndex = 13;
@@ -192,11 +193,22 @@ namespace MegaDesk_Rodriguez
             this.rush.Size = new System.Drawing.Size(100, 21);
             this.rush.TabIndex = 5;
             // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(189, 332);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.TabIndex = 16;
+            this.saveButton.Text = "Save Order";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveDesk);
+            // 
             // AddQuote
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(283, 367);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.rush);
             this.Controls.Add(this.drawers);
             this.Controls.Add(this.material);
@@ -239,5 +251,6 @@ namespace MegaDesk_Rodriguez
         private ComboBox material;
         private ComboBox drawers;
         private ComboBox rush;
+        private Button saveButton;
     }
 }

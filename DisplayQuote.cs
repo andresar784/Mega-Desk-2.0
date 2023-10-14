@@ -13,6 +13,7 @@ namespace MegaDesk_Rodriguez
 {
     public partial class DisplayQuote : Form
     {
+
         public string CustomerName { get; set; }
         public int Depth { get; set; }
         public int Width { get; set; }
@@ -37,11 +38,6 @@ namespace MegaDesk_Rodriguez
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void saveToFile(object sender, EventArgs e)
-        {       
-            
         }
     }
 }

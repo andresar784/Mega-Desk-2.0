@@ -8,8 +8,17 @@ using System.Threading.Tasks;
 namespace MegaDesk_Rodriguez
 {
     internal class DeskQuote
+
     {
         private static double[,] rushOrderPrices;
+
+         public string CustomerName { get; set; }
+    public int Depth { get; set; }
+    public int Width { get; set; }
+    public string Material { get; set; }
+    public int Drawers { get; set; }
+    public decimal TotalPrice { get; set; }
+
 
         public static double[,] GetRushOrders(string filePath)
         {
