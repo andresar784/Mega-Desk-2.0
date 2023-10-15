@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MegaDesk_Rodriguez
 {
-    internal class DeskQuote
+    public class DeskQuote
 
     {
         private static double[,] rushOrderPrices;

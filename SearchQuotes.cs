@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,9 +30,21 @@ namespace MegaDesk_Rodriguez
             mainMenu.Show();
             this.Close();
         }
-        private void searchButton(object sender, EventArgs e)
-        {
 
+        private void searchComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Desk.DesktopMaterial selectedMaterial = (Desk.DesktopMaterial)searchComboBox.SelectedItem;
+
+            // Load all quotes
+            string jsonFilePath = @"quotes.json";
+            string jsonData = File.ReadAllText(jsonFilePath);
+            List<DeskQuote> allQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(jsonData);
+
+            // Filter quotes based on selected surface material
+            var filteredQuotes = allQuotes.Where(q => q.Material == selectedMaterial.ToString()).ToList();
+
+            // Display the filtered quotes in DataGridView
+            searchDataGridView.DataSource = filteredQuotes;
         }
     }
 }

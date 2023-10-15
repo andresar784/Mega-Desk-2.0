@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,7 +31,12 @@ namespace MegaDesk_Rodriguez
 
         private void ViewAllQuotes_Load(object sender, EventArgs e)
         {
+            string jsonFilePath = "quotes.json";
+            string jsonData = File.ReadAllText(jsonFilePath);
 
+            List<DeskQuote> quotesList = JsonConvert.DeserializeObject<List<DeskQuote>>(jsonData);
+
+            quoteDataGridView.DataSource = quotesList;
         }
     }
 }
